@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!-- Composition root: HTTP webhook endpoint plus background inbox/outbox workers. -->
+  <PropertyGroup>
+    <UserSecretsId>maijichain-webhost</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Maijichain.Line\Maijichain.Line.csproj" />
+    <ProjectReference Include="..\Maijichain.Persistence\Maijichain.Persistence.csproj" />
+  </ItemGroup>
+</Project>

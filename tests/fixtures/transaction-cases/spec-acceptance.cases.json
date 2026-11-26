@@ -1,0 +1,138 @@
+{
+  "corpus": "spec-acceptance",
+  "synthetic": true,
+  "note": "Hand-written, synthetic cases that pin the spec's acceptance criteria. Not historical group data.",
+  "cases": [
+    {
+      "id": "TC-001", "category": "rounding", "title": "100 TWD split equally among 3 (legacy remainder rule)",
+      "remainderPolicy": "FirstByMemberId", "members": ["amy", "bob", "cat"],
+      "steps": [ { "op": "expense", "by": "amy", "amount": 100, "split": "equal", "participants": ["amy", "bob", "cat"] } ],
+      "expect": { "balances": { "amy": 66, "bob": -33, "cat": -33 }, "transfers": 2 }
+    },
+    {
+      "id": "TC-002", "category": "allocation", "title": "Payer is one of the participants",
+      "members": ["amy", "bob", "cat"],
+      "steps": [ { "op": "expense", "by": "amy", "amount": 300, "split": "equal", "participants": ["amy", "bob", "cat"] } ],
+      "expect": { "balances": { "amy": 200, "bob": -100, "cat": -100 } }
+    },
+    {
+      "id": "TC-003", "category": "allocation", "title": "Payer is not a participant",
+      "members": ["amy", "bob", "cat"],
+      "steps": [ { "op": "expense", "by": "amy", "amount": 300, "split": "equal", "participants": ["bob", "cat"] } ],
+      "expect": { "balances": { "amy": 300, "bob": -150, "cat": -150 } }
+    },
+    {
+      "id": "TC-004", "category": "failure", "title": "Exact shares sum to 999 for a 1,000 TWD expense",
+      "members": ["amy", "bob"],
+      "steps": [ { "op": "expense", "by": "amy", "amount": 1000, "split": "exact", "shares": { "amy": 500, "bob": 499 }, "error": "split.mismatch" } ],
+      "expect": { "balances": {}, "transfers": 0 }
+    },
+    {
+      "id": "TC-007", "category": "correction", "title": "Posted expense corrected by reversal and replacement",
+      "members": ["amy", "bob", "cat"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 900, "split": "equal", "participants": ["amy", "bob", "cat"] },
+        { "op": "reverse", "by": "amy", "expense": "E1", "reason": "should be 600" },
+        { "op": "expense", "by": "amy", "amount": 600, "split": "equal", "participants": ["amy", "bob", "cat"] }
+      ],
+      "expect": { "balances": { "amy": 400, "bob": -200, "cat": -200 } }
+    },
+    {
+      "id": "TC-008", "category": "netting", "title": "Circular obligations net to zero",
+      "members": ["amy", "bob", "cat"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 100, "split": "equal", "participants": ["bob"] },
+        { "op": "expense", "by": "bob", "amount": 100, "split": "equal", "participants": ["cat"] },
+        { "op": "expense", "by": "cat", "amount": 100, "split": "equal", "participants": ["amy"] }
+      ],
+      "expect": { "balances": { "amy": 0, "bob": 0, "cat": 0 }, "transfers": 0 }
+    },
+    {
+      "id": "TC-009", "category": "netting", "title": "Eleven members, everyone non-zero",
+      "members": ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", "m11"],
+      "steps": [
+        { "op": "expense", "by": "m1", "amount": 5500, "split": "equal", "participants": ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10", "m11"] },
+        { "op": "expense", "by": "m2", "amount": 1320, "split": "equal", "participants": ["m3", "m4", "m5", "m6", "m7", "m8"] },
+        { "op": "expense", "by": "m3", "amount": 770, "split": "weighted", "weights": { "m9": 3, "m10": 2, "m11": 2 } },
+        { "op": "expense", "by": "m4", "amount": 333, "split": "equal", "participants": ["m1", "m5", "m9"] }
+      ],
+      "expect": { "maxTransfers": 10 }
+    },
+    {
+      "id": "TC-011", "category": "settlement", "title": "Stale plan is refused",
+      "members": ["amy", "bob"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 200, "split": "equal", "participants": ["amy", "bob"] },
+        { "op": "plan", "by": "amy" },
+        { "op": "expense", "by": "amy", "amount": 50, "split": "equal", "participants": ["bob"] },
+        { "op": "pay-plan", "plan": "S1", "transfer": 1, "error": "plan.stale" }
+      ],
+      "expect": { "balances": { "amy": 150, "bob": -150 } }
+    },
+    {
+      "id": "SET-001", "category": "settlement", "title": "Full plan paid and confirmed clears everyone",
+      "members": ["amy", "bob", "cat", "dan"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 1100, "split": "exact", "shares": { "bob": 100, "cat": 500, "dan": 500 } },
+        { "op": "expense", "by": "bob", "amount": 300, "split": "exact", "shares": { "bob": 100, "dan": 300 }, "error": "split.mismatch" },
+        { "op": "expense", "by": "bob", "amount": 400, "split": "exact", "shares": { "bob": 100, "dan": 300 } },
+        { "op": "plan", "by": "cat" },
+        { "op": "pay-plan", "plan": "S1", "all": true }
+      ],
+      "expect": { "balances": { "amy": 0, "bob": 0, "cat": 0, "dan": 0 }, "transfers": 0 }
+    },
+    {
+      "id": "SET-002", "category": "settlement", "title": "Debtor claim waits for creditor; rejected claim changes nothing",
+      "members": ["amy", "bob"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 200, "split": "equal", "participants": ["amy", "bob"] },
+        { "op": "claim", "by": "bob", "to": "amy", "amount": 100 },
+        { "op": "reject", "by": "amy", "payment": "P1" },
+        { "op": "claim", "by": "bob", "to": "amy", "amount": 100 },
+        { "op": "confirm-payment", "by": "bob", "payment": "P2", "error": "auth.denied" },
+        { "op": "confirm-payment", "by": "amy", "payment": "P2" }
+      ],
+      "expect": { "balances": { "amy": 0, "bob": 0 } }
+    },
+    {
+      "id": "SET-003", "category": "settlement", "title": "Overpayment flips the direction instead of being lost",
+      "members": ["amy", "bob"],
+      "steps": [
+        { "op": "expense", "by": "amy", "amount": 200, "split": "equal", "participants": ["amy", "bob"] },
+        { "op": "receipt", "by": "amy", "from": "bob", "amount": 150 }
+      ],
+      "expect": { "balances": { "amy": -50, "bob": 50 }, "transfers": 1 }
+    },
+    {
+      "id": "NET-001", "category": "netting", "title": "Greedy needs 4, minimum is 3",
+      "members": ["a", "b", "c", "d", "e"],
+      "steps": [
+        { "op": "expense", "by": "d", "amount": 3, "split": "exact", "shares": { "a": 3 } },
+        { "op": "expense", "by": "e", "amount": 4, "split": "exact", "shares": { "b": 2, "c": 2 } }
+      ],
+      "expect": { "balances": { "a": -3, "b": -2, "c": -2, "d": 3, "e": 4 }, "transfers": 3 }
+    },
+    {
+      "id": "ALLOC-001", "category": "allocation", "title": "Weighted pizza",
+      "members": ["amy", "bob", "cat"],
+      "steps": [ { "op": "expense", "by": "cat", "amount": 900, "split": "weighted", "weights": { "amy": 2, "bob": 1 } } ],
+      "expect": { "balances": { "amy": -600, "bob": -300, "cat": 900 } }
+    },
+    {
+      "id": "ALLOC-002", "category": "failure", "title": "Amount too small to give everyone a unit",
+      "members": ["amy", "bob", "cat"],
+      "steps": [ { "op": "expense", "by": "amy", "amount": 2, "split": "equal", "participants": ["amy", "bob", "cat"], "error": "amount.too_small" } ],
+      "expect": { "balances": {} }
+    },
+    {
+      "id": "AUTH-001", "category": "failure", "title": "Only the recorder or a coordinator may reverse",
+      "members": ["amy", "bob", "cat"],
+      "steps": [
+        { "op": "expense", "by": "bob", "amount": 300, "split": "equal", "participants": ["amy", "bob", "cat"] },
+        { "op": "reverse", "by": "cat", "expense": "E1", "reason": "nope", "error": "auth.denied" },
+        { "op": "reverse", "by": "amy", "expense": "E1", "reason": "coordinator correction" }
+      ],
+      "expect": { "balances": { "amy": 0, "bob": 0, "cat": 0 } }
+    }
+  ]
+}

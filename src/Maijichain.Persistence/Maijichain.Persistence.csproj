@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- File-based adapters: append-only, checksummed JSON-lines journals. No database server or native driver needed. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Maijichain.Application\Maijichain.Application.csproj" />
+  </ItemGroup>
+</Project>

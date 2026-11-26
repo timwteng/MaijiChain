@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Maijichain.BitcoinPoc\Maijichain.BitcoinPoc.csproj" />
+  </ItemGroup>
+</Project>

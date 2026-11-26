@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Maijichain.Application/Maijichain.Application.csproj" />
+    <Project Path="src/Maijichain.BitcoinPoc/Maijichain.BitcoinPoc.csproj" />
+    <Project Path="src/Maijichain.Domain/Maijichain.Domain.csproj" />
+    <Project Path="src/Maijichain.Line/Maijichain.Line.csproj" />
+    <Project Path="src/Maijichain.Persistence/Maijichain.Persistence.csproj" />
+    <Project Path="src/Maijichain.WebHost/Maijichain.WebHost.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Maijichain.BitcoinPoc.Tests/Maijichain.BitcoinPoc.Tests.csproj" />
+    <Project Path="tests/Maijichain.Domain.Tests/Maijichain.Domain.Tests.csproj" />
+    <Project Path="tests/Maijichain.Integration.Tests/Maijichain.Integration.Tests.csproj" />
+  </Folder>
+</Solution>

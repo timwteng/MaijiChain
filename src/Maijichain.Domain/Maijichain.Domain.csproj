@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Pure domain: no I/O, no LINE, no Bitcoin. Everything here is deterministic and unit-testable. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Maijichain.Domain.Tests" />
+  </ItemGroup>
+</Project>

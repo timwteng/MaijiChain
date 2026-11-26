@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Use cases and ports. Depends only on the domain; storage and LINE plug in through interfaces. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Maijichain.Domain\Maijichain.Domain.csproj" />
+  </ItemGroup>
+</Project>

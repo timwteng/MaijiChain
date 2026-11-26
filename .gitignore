@@ -1,0 +1,58 @@
+# ---- Build output -----------------------------------------------------------
+bin/
+obj/
+artifacts/
+*.nupkg
+*.snupkg
+
+# ---- Test output ------------------------------------------------------------
+TestResults/
+*.trx
+*.coverage
+coverage*.json
+coverage*.xml
+
+# ---- IDE and OS files -------------------------------------------------------
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.rsuser
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Runtime data: never commit ---------------------------------------------
+# Ledger journals and the operations store hold the group's financial records,
+# expense descriptions and LINE chat routing data.
+data/
+*.journal.jsonl
+ops.jsonl
+*.jsonl.tmp
+logs/
+*.log
+
+# ---- Secrets and local configuration -----------------------------------------
+# Real secrets belong in `dotnet user-secrets` (stored outside the repo) or env vars.
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Development.json
+appsettings.*.local.json
+*.pfx
+*.p12
+*.pem
+*.key
+*.wif
+
+# ---- Bitcoin node data, wallets and credentials ------------------------------
+bitcoin.conf
+.cookie
+wallet.dat
+*.wallet
+regtest/
+signet/
+testnet4/

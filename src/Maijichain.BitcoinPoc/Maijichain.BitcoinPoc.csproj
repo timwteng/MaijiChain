@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Bitcoin test-network proof of concept. Deliberately has NO reference to the ledger projects: it receives a plain
+    settlement instruction and can never write to the expense record (spec principle 5, FR-BTC-11).
+  -->
+  <ItemGroup>
+    <PackageReference Include="NBitcoin" Version="10.0.21" />
+  </ItemGroup>
+</Project>

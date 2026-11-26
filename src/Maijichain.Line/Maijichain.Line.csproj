@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- LINE Messaging API adapter: webhook authentication, command parsing, replies. No domain rules live here. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Maijichain.Application\Maijichain.Application.csproj" />
+  </ItemGroup>
+</Project>
